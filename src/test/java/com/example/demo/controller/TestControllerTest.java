@@ -27,7 +27,7 @@ public class TestControllerTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
-
+	
 	@Test
 	public void testGet() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/get")).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk());
@@ -56,5 +56,20 @@ public class TestControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.message", CoreMatchers.is("Hello Post"))).andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testPostUsingNestedService() throws Exception {
 
+		MyModel requestMessage = new MyModel();
+		requestMessage.setMessage("Hello Request Post");
+		
+		MyModel responseMessage = new MyModel();
+		responseMessage.setMessage("Hello Response Post");
+		
+
+		mvc.perform(MockMvcRequestBuilders.post("/post/nested/service").content(objectMapper.writeValueAsString(requestMessage))
+				.contentType(MediaType.APPLICATION_JSON_UTF8)).andDo(MockMvcResultHandlers.print())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.message", CoreMatchers.is("Hello Request Post"))).andExpect(status().isOk());
+	}
 }
