@@ -72,13 +72,10 @@ public class TestControllerTest {
 		MyModel responseMessage = new MyModel();
 		responseMessage.setMessage("Hello Response Post");
 		
-		/*After Overriding equals() its not working both the ways*/ 
-		//given(testService1.getMessage(ArgumentMatchers.eq(requestMessage))).willReturn(responseMessage);
 		given(testService1.getMessage(requestMessage)).willReturn(responseMessage);
-		
-		/*-----------------------------------------------------------*/
-		
+		//given(testService1.getMessage(ArgumentMatchers.eq(requestMessage))).willReturn(responseMessage);
 		//given(testService1.getMessage(ArgumentMatchers.any(MyModel.class))).willReturn(responseMessage);
+		//given(testService1.getMessage(ArgumentMatchers.isA(MyModel.class))).willReturn(responseMessage);
 		
 		mvc.perform(MockMvcRequestBuilders.post("/post/nested/service").content(objectMapper.writeValueAsString(requestMessage))
 				.contentType(MediaType.APPLICATION_JSON_UTF8)).andDo(MockMvcResultHandlers.print())

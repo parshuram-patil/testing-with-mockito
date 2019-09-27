@@ -22,7 +22,7 @@ public class MyModel {
 
 		MyModel model = (MyModel) obj;
 
-		return (model.message.equals(this.message) && model.message == this.message);
+		return (model.message.equals(this.message));
 	}
 
 	@Override
