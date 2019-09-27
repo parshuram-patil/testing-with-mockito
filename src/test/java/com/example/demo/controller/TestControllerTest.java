@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,7 +35,7 @@ public class TestControllerTest {
 	@MockBean
 	private TestService1 testService1;
 	
-	/*@Test
+	@Test
 	public void testGet() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/get")).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk());
 	}
@@ -57,14 +58,11 @@ public class TestControllerTest {
 		MyModel requestMessage = new MyModel();
 		requestMessage.setMessage("Hello Request Post");
 		
-		MyModel responseMessage = new MyModel();
-		responseMessage.setMessage("Hello Response Post");
-		
 		mvc.perform(MockMvcRequestBuilders.post("/post/service").content(objectMapper.writeValueAsString(requestMessage))
 				.contentType(MediaType.APPLICATION_JSON_UTF8)).andDo(MockMvcResultHandlers.print())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$.message", CoreMatchers.is("Hello Response Post"))).andExpect(status().isOk());
-	}*/
+				.andExpect(jsonPath("$.message", CoreMatchers.is("Hello Request Post"))).andExpect(status().isOk());
+	}
 	
 	@Test
 	public void testPostUsingNestedService() throws Exception {
@@ -75,7 +73,8 @@ public class TestControllerTest {
 		MyModel responseMessage = new MyModel();
 		responseMessage.setMessage("Hello Response Post");
 		
-		given(testService1.getMessage(requestMessage)).willReturn(responseMessage);
+		//given(testService1.getMessage(requestMessage)).willReturn(responseMessage);
+		given(testService1.getMessage(ArgumentMatchers.any(MyModel.class))).willReturn(responseMessage);
 		
 		mvc.perform(MockMvcRequestBuilders.post("/post/nested/service").content(objectMapper.writeValueAsString(requestMessage))
 				.contentType(MediaType.APPLICATION_JSON_UTF8)).andDo(MockMvcResultHandlers.print())
