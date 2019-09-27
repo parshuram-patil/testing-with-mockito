@@ -12,9 +12,23 @@ public class MyModel {
 		this.message = message;
 	}
 
-	public MyModel getMessage(MyModel message2) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+
+		if (obj == null || obj.getClass() != this.getClass())
+			return false;
+
+		MyModel model = (MyModel) obj;
+
+		return (model.message.equals(this.message) && model.message == this.message);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return this.message.hashCode();
 	}
 
 }

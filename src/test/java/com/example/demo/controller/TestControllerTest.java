@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -73,8 +72,13 @@ public class TestControllerTest {
 		MyModel responseMessage = new MyModel();
 		responseMessage.setMessage("Hello Response Post");
 		
-		//given(testService1.getMessage(requestMessage)).willReturn(responseMessage);
-		given(testService1.getMessage(ArgumentMatchers.any(MyModel.class))).willReturn(responseMessage);
+		/*After Overriding equals() its not working both the ways*/ 
+		//given(testService1.getMessage(ArgumentMatchers.eq(requestMessage))).willReturn(responseMessage);
+		given(testService1.getMessage(requestMessage)).willReturn(responseMessage);
+		
+		/*-----------------------------------------------------------*/
+		
+		//given(testService1.getMessage(ArgumentMatchers.any(MyModel.class))).willReturn(responseMessage);
 		
 		mvc.perform(MockMvcRequestBuilders.post("/post/nested/service").content(objectMapper.writeValueAsString(requestMessage))
 				.contentType(MediaType.APPLICATION_JSON_UTF8)).andDo(MockMvcResultHandlers.print())
